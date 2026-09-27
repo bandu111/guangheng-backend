@@ -1,0 +1,15 @@
+services:
+  hermes:
+    image: nousresearch/hermes-agent:latest
+    container_name: hermes
+    restart: unless-stopped
+    init: true
+    network_mode: host
+    volumes:
+      - ./data:/opt/data
+    environment:
+      HERMES_UID: "10001"
+      HERMES_GID: "10001"
+    security_opt:
+      - no-new-privileges:true
+    command: ["gateway", "run"]

@@ -1,0 +1,13 @@
+version: v1
+
+# Energy history is collected by the backend process, independently of whether
+# a phone has the app open. Five-minute samples are sufficient for the current
+# household dashboard while keeping the SQLite database small.
+enabled: true
+interval_seconds: 300
+initial_delay_seconds: 5
+retention_days: 400
+
+# A value may only be carried forward for this long. Missing observations are
+# shown as missing coverage instead of being silently stretched across hours.
+max_hold_seconds: 900

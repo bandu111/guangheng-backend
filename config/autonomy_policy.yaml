@@ -1,0 +1,16 @@
+version: v1
+
+default_level: CONFIRM
+
+scheduler:
+  enabled: true
+  interval_seconds: 300
+  initial_delay_seconds: 30
+
+deduplication:
+  pending_proposal_reuse: true
+  notification_reuse: true
+  rejected_reproposal_cooldown_minutes: 60
+
+runtime:
+  run_timeout_seconds: 60

@@ -1,0 +1,41 @@
+# Dedicated GuangHeng profile: prevent built-in/general-purpose tools from
+# becoming an alternate path to Home Assistant or GuangHeng write APIs.
+agent:
+  disabled_toolsets:
+    - homeassistant
+    - terminal
+    - code_execution
+    - file
+    - browser
+    - computer_use
+    - connections
+    - delegation
+    - cronjob
+
+mcp_servers:
+  guangheng:
+    url: "http://127.0.0.1:8001/mcp"
+    enabled: true
+    protocol: auto
+    trust: untrusted
+    supports_parallel_tool_calls: false
+    timeout: 120
+    connect_timeout: 30
+    tools:
+      include:
+        - get_energy_state
+        - get_energy_balance
+        - get_weather
+        - get_solar_forecast
+        - get_load_forecast
+        - get_tariff
+        - get_strategy
+        - get_decision_context
+        - evaluate_optimizer
+        - generate_proposal
+        - get_proposal
+        - list_proposals
+        - get_execution
+        - list_executions
+      resources: false
+      prompts: false

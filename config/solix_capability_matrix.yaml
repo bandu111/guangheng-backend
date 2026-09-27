@@ -1,0 +1,165 @@
+schema_version: "0.1"
+
+device:
+  vendor: anker_solix
+  model: "Anker SOLIX Solarbank 4 E5000 Pro"
+  device_type: storage
+  topology_role: storage
+  source_mode: simulator
+  integration: anker_solix_official
+
+identity:
+  model:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_device_model
+    access: read
+
+  serial_number:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_device_serial_number
+    access: read
+
+  firmware_version:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_firmware_version
+    access: read
+
+telemetry:
+  battery_soc:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_soc
+    unit: "%"
+    access: read
+
+  solar_power:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_solar_power
+    unit: W
+    access: read
+
+  battery_charging_power:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_battery_charging_power
+    unit: W
+    access: read
+
+  battery_discharging_power:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_battery_discharging_power
+    unit: W
+    access: read
+
+  home_load:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_home_load
+    unit: W
+    access: read
+
+  grid_import_power:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_grid_import_power
+    unit: W
+    access: read
+
+  grid_export_power:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_grid_export_power
+    unit: W
+    access: read
+
+  ac_output_power:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_ac_output
+    unit: W
+    access: read
+
+  total_solar_generation:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_total_solar_generation
+    unit: kWh
+    access: read
+
+  battery_charging_energy:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_battery_charging_energy
+    unit: kWh
+    access: read
+
+  battery_discharge_energy:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_battery_discharge_energy
+    unit: kWh
+    access: read
+
+  battery_capacity:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_battery_capacity
+    unit: kWh
+    access: read
+
+  device_status:
+    entity_id: sensor.anker_solix_solarbank_4_e5000_pro_001_device_status
+    access: read
+
+controls:
+  operating_mode:
+    entity_id: select.anker_solix_solarbank_4_e5000_pro_001_operating_mode_device_runs_by_command_in_third_party_controlled
+    access: read_write
+    verified: true
+    verification:
+      method: home_assistant_tcp_simulator_readback
+      tested_value: self_consumption
+
+  grid_flow:
+    entity_id: select.anker_solix_solarbank_4_e5000_pro_001_grid_flow
+    access: read_write
+    verified: true
+    verification:
+      method: home_assistant_tcp_simulator_readback
+      tested_value: discharge
+
+  power_control:
+    entity_id: number.anker_solix_solarbank_4_e5000_pro_001_power_control
+    access: read_write
+    unit: W
+    min: 0
+    max: 6000
+    step: 1
+    verified: true
+    verification:
+      method: home_assistant_tcp_simulator_readback
+      tested_value: 100
+
+  charging_limit:
+    entity_id: number.anker_solix_solarbank_4_e5000_pro_001_charging_limit
+    access: read_write
+    unit: "%"
+    min: 80
+    max: 100
+    step: 1
+    verified: true
+    verification:
+      method: home_assistant_tcp_simulator_readback
+      tested_value: 91
+
+  discharge_limit:
+    entity_id: number.anker_solix_solarbank_4_e5000_pro_001_discharge_limit
+    access: read_write
+    unit: "%"
+    min: 0
+    max: 20
+    step: 1
+    verified: true
+    verification:
+      method: home_assistant_tcp_simulator_readback
+      tested_value: 11
+
+  backup_reserve:
+    entity_id: number.anker_solix_solarbank_4_e5000_pro_001_backup_reserve
+    access: read_write
+    unit: "%"
+    min: 0
+    max: 100
+    step: 1
+    verified: true
+    verification:
+      method: home_assistant_tcp_simulator_readback
+      tested_value: 31
+      modbus_address: 60002
+
+permissions_default:
+  observe: true
+  propose: true
+  control: false
+
+safety:
+  require_verified_control: true
+  require_fresh_state: true
+  max_state_age_seconds: 30
+  require_device_online: true
+  require_user_approval: true

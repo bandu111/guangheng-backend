@@ -1,0 +1,25 @@
+version: v2
+
+auto:
+  baseline_reserve_percent: 30
+  minimum_reserve_percent: 20
+  maximum_reserve_percent: 50
+
+  horizons:
+    primary_hours: 6
+    secondary_hours: 24
+
+  net_energy_thresholds_kwh:
+    strong_surplus: 2.0
+    balanced_lower: -2.0
+    balanced_upper: 2.0
+    moderate_deficit: -5.0
+
+  reserve_targets:
+    strong_surplus: 20
+    balanced: 30
+    moderate_deficit: 40
+    strong_deficit: 50
+
+confidence:
+  minimum_for_dynamic_adjustment: MEDIUM

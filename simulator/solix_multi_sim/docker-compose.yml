@@ -1,0 +1,7 @@
+services:
+  solix-sim:
+    build: .
+    image: guangheng-solix-multi-sim:1.0.0
+    container_name: solix-sim
+    restart: unless-stopped
+    network_mode: host

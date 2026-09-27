@@ -1,0 +1,1 @@
+"""Authenticated Companion voice gateway."""

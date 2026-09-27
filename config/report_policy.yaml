@@ -1,0 +1,13 @@
+country: CN
+
+carbon:
+  factor_kg_co2_per_kwh: 0.6096
+  provider: MEE_NBS
+  reference_year: 2023
+  published_date: "2025-12-31"
+  source_url: "https://www.mee.gov.cn/ywdt/zbft/202601/t20260105_1139911.shtml"
+
+cost:
+  baseline_method: all_home_consumption_at_reference_tariff
+  actual_method: grid_import_at_reference_tariff
+  savings_method: avoided_grid_energy_at_reference_tariff

@@ -1,0 +1,211 @@
+schema_version: "2.0"
+integration: anker_solix_official
+simulator_serial_numbers:
+  - 123DPM44567890123
+  - 123DMWH4567890123
+  - 123DNMS4567890123
+  - 123DMY64567890123
+  - 123DNN44567890123
+  - 123DNSL4567890123
+  - 123QNA4567890123
+
+safety:
+  require_verified_control: true
+  require_fresh_state: true
+  max_state_age_seconds: 30
+  require_device_online: true
+  require_user_approval: true
+
+profile_templates:
+  solix_storage: &solix_storage
+    vendor: anker_solix
+    device_type: storage
+    topology_role: storage
+    identity:
+      model: {domain: sensor, suffixes: [device_model]}
+      serial_number: {domain: sensor, suffixes: [device_serial_number, device_sn]}
+      firmware_version: {domain: sensor, suffixes: [device_sw_version, firmware_version]}
+    online_required: [battery_soc]
+    verification_source_modes: [simulator]
+    verification_overrides:
+      operating_mode: true
+      battery_power_direction: true
+      battery_power_setpoint: true
+      charging_limit: true
+      discharge_limit: true
+      backup_reserve: true
+    verification_details:
+      operating_mode: {status: verified, method: home_assistant_tcp_simulator_readback, note: 已完成共享家庭 TCP 模拟器写入与状态回读验证}
+      battery_power_direction: {status: verified, method: home_assistant_tcp_simulator_readback, note: 已完成共享家庭 TCP 模拟器充放电方向写入与状态回读验证}
+      battery_power_setpoint: {status: verified, method: home_assistant_tcp_simulator_readback, note: 已完成共享家庭 TCP 模拟器功率写入与状态回读验证, readback_reliable: true}
+      charging_limit: {status: verified, method: home_assistant_tcp_simulator_readback, note: 已完成共享家庭 TCP 模拟器充电上限写入与状态回读验证}
+      discharge_limit: {status: verified, method: home_assistant_tcp_simulator_readback, note: 已完成共享家庭 TCP 模拟器放电下限写入与状态回读验证}
+      backup_reserve: {status: verified, method: home_assistant_tcp_simulator_readback, note: 已完成共享家庭 TCP 模拟器备用预留写入与状态回读验证}
+    telemetry:
+      battery_soc: {domain: sensor, suffixes: [battery_soc, soc], unit: "%", access: read}
+      solar_power: {domain: sensor, suffixes: [pv_power, solar_power], unit: W, access: read}
+      third_party_solar_power: {domain: sensor, suffixes: [third_party_pv_power], unit: W, access: read}
+      battery_charging_power: {domain: sensor, suffixes: [battery_charging_power], unit: W, access: read}
+      battery_discharging_power: {domain: sensor, suffixes: [battery_discharging_power, battery_discharge_power], unit: W, access: read}
+      home_load: {domain: sensor, suffixes: [load_power, home_load], unit: W, access: read}
+      grid_import_power: {domain: sensor, suffixes: [grid_import_power], unit: W, access: read}
+      grid_export_power: {domain: sensor, suffixes: [grid_export_power], unit: W, access: read}
+      ac_output_power: {domain: sensor, suffixes: [ac_grid_output_power, ac_output], unit: W, access: read}
+      total_solar_generation: {domain: sensor, suffixes: [pv_total_generation, total_solar_generation], unit: kWh, access: read}
+      battery_charging_energy: {domain: sensor, suffixes: [cumulative_charge_energy, battery_charging_energy], unit: kWh, access: read}
+      battery_discharge_energy: {domain: sensor, suffixes: [cumulative_discharge_energy, battery_discharge_energy], unit: kWh, access: read}
+      battery_capacity: {domain: sensor, suffixes: [rated_energy, battery_capacity], unit: kWh, access: read}
+      device_status: {domain: sensor, suffixes: [battery_status, device_status], access: read}
+    controls:
+      operating_mode:
+        {domain: select, suffixes: [operating_mode, operating_mode_device_runs_by_command_in_third_party_controlled], access: read_write, min: 0, max: 7, step: 1, verified: false, options: {0: self_consumption, 1: tou_mode, 3: third_party_control, 4: custom_mode, 5: socket_overlay_mode, 6: smart_mode, 7: dynamic_pricing}}
+      battery_power_direction:
+        {domain: select, suffixes: [battery_power_direction, grid_flow], access: read_write, min: 0, max: 1, step: 1, verified: false, options: {0: charge, 1: discharge}}
+      battery_power_setpoint:
+        {domain: number, suffixes: [battery_power_setpoint, power_control], unit: W, access: read_write, min: 0, max: 10000, step: 1, verified: false, readback_reliable: false}
+      charging_limit: {domain: number, suffixes: [charging_limit_soc, charging_limit], unit: "%", access: read_write, min: 80, max: 100, step: 1, verified: false}
+      discharge_limit: {domain: number, suffixes: [discharge_limit_soc, discharge_limit], unit: "%", access: read_write, min: 0, max: 20, step: 1, verified: false}
+      backup_reserve: {domain: number, suffixes: [backup_reserve_soc, backup_reserve], unit: "%", access: read_write, min: 0, max: 100, step: 1, verified: false}
+
+profiles:
+  solarbank_4_e5000_pro:
+    <<: *solix_storage
+    display_name: Anker SOLIX Solarbank 4 E5000 Pro
+    model_patterns: [solarbank 4 e5000 pro]
+    support_status: supported
+    verification_overrides:
+      operating_mode: true
+      battery_power_direction: true
+      battery_power_setpoint: true
+      charging_limit: true
+      discharge_limit: true
+      backup_reserve: true
+    verification_details:
+      operating_mode:
+        status: verified
+        method: home_assistant_tcp_simulator_readback
+        note: 已完成 TCP 模拟器写入、强制刷新、状态回读与原值恢复验证
+      battery_power_direction:
+        status: verified
+        method: home_assistant_tcp_simulator_readback
+        note: 已完成 TCP 模拟器充放电方向写入、状态回读与原值恢复验证
+      battery_power_setpoint:
+        status: verified
+        method: home_assistant_tcp_simulator_readback
+        note: 已完成 TCP 模拟器功率写入、强制刷新、状态回读与原值恢复验证
+        readback_reliable: true
+      charging_limit:
+        status: verified
+        method: home_assistant_tcp_simulator_readback
+        note: 已完成 TCP 模拟器充电上限写入、状态回读与原值恢复验证
+      discharge_limit:
+        status: verified
+        method: home_assistant_tcp_simulator_readback
+        note: 已完成 TCP 模拟器放电下限写入、状态回读与原值恢复验证
+      backup_reserve:
+        status: verified
+        method: home_assistant_tcp_simulator_readback
+        note: 已完成 TCP 模拟器备用预留写入、状态回读与原值恢复验证
+
+  solarbank_max_ac_xe_ac:
+    <<: *solix_storage
+    display_name: Anker SOLIX Solarbank Max AC / XE AC
+    model_patterns: [solarbank max ac, solix xe ac]
+    support_status: supported_requires_hardware_verification
+
+  solarbank_max_xe:
+    <<: *solix_storage
+    display_name: Anker SOLIX Solarbank Max / XE
+    model_patterns: [solarbank max, solix xe]
+    support_status: supported_requires_hardware_verification
+
+  smart_plug_gen_2:
+    display_name: Anker SOLIX Smart Plug Gen 2
+    vendor: anker_solix
+    model_patterns: [smart plug gen 2, qna]
+    firmware_requirement: "0.0.8.4+"
+    support_status: supported_requires_hardware_verification
+    device_type: smart_plug
+    topology_role: load
+    identity:
+      model: {domain: sensor, suffixes: [device_model]}
+      serial_number: {domain: sensor, suffixes: [device_serial_number, device_sn]}
+      firmware_version: {domain: sensor, suffixes: [firmware_version]}
+    online_required: [real_time_power, switch_status]
+    verification_source_modes: [simulator]
+    verification_overrides: {power_switch: true}
+    verification_details:
+      power_switch: {status: verified, method: home_assistant_tcp_simulator_meter_readback, note: 已完成插座开关写入、插座状态回读及 Smart Meter 功率变化验证}
+    telemetry:
+      real_time_power: {domain: sensor, suffixes: [real_time_active_power, real_time_power], unit: W, access: read}
+      voltage: {domain: sensor, suffixes: [real_time_voltage, voltage], unit: V, access: read}
+      current: {domain: sensor, suffixes: [real_time_current, current], unit: A, access: read}
+      cumulative_energy: {domain: sensor, suffixes: [cumulative_energy], unit: kWh, access: read}
+      temperature: {domain: sensor, suffixes: [temperature], unit: "°C", access: read}
+      switch_status: {domain: sensor, suffixes: [switch_status], access: read}
+    controls:
+      power_switch:
+        domain: switch
+        suffixes: [socket_switch, power_switch]
+        access: read_write
+        verified: false
+        min: 0
+        max: 1
+        step: 1
+        verification_note: 需在 Smart Plug Gen 2 实机上完成开关与回读验证后才能启用
+
+  smart_plug_gen_1:
+    display_name: Anker SOLIX Smart Plug
+    vendor: anker_solix
+    model_patterns: []
+    device_type: smart_plug
+    topology_role: load
+    discoverable: false
+    support_status: official_integration_coming_soon
+    identity: {}
+    telemetry: {}
+    controls: {}
+
+  smart_meter_gen_2:
+    display_name: Anker SOLIX Smart Meter Gen 2
+    vendor: anker_solix
+    model_patterns: [smart meter gen 2, dnsl, dnsm]
+    support_status: supported
+    device_type: smart_meter
+    topology_role: meter
+    identity:
+      model: {domain: sensor, suffixes: [device_model, meter_model]}
+      serial_number: {domain: sensor, suffixes: [device_serial_number, meter_sn]}
+      firmware_version: {domain: sensor, suffixes: [firmware_version, meter_sw_version]}
+    online_required: [primary_total_active_power]
+    telemetry:
+      meter_type: {domain: sensor, suffixes: [meter_type], access: read}
+      primary_total_active_power: {domain: sensor, suffixes: [main_ct_total_active_power, primary_total_active_power], unit: W, access: read}
+      primary_total_reactive_power: {domain: sensor, suffixes: [main_ct_total_reactive_power, primary_total_reactive_power], unit: var, access: read}
+      primary_total_power_factor: {domain: sensor, suffixes: [main_ct_total_power_factor, primary_total_power_factor], access: read}
+      primary_phase_1_active_power: {domain: sensor, suffixes: [main_ct_phase_1_active_power, primary_phase_1_active_power], unit: W, access: read}
+      primary_phase_1_current: {domain: sensor, suffixes: [main_ct_phase_1_active_current, primary_phase_1_current], unit: A, access: read}
+      primary_phase_1_voltage: {domain: sensor, suffixes: [main_ct_phase_1_voltage, primary_phase_1_voltage], unit: V, access: read}
+      primary_phase_2_active_power: {domain: sensor, suffixes: [main_ct_phase_2_active_power, primary_phase_2_active_power], unit: W, access: read}
+      primary_phase_2_current: {domain: sensor, suffixes: [main_ct_phase_2_active_current, primary_phase_2_current], unit: A, access: read}
+      primary_phase_2_voltage: {domain: sensor, suffixes: [main_ct_phase_2_voltage, primary_phase_2_voltage], unit: V, access: read}
+      primary_phase_3_active_power: {domain: sensor, suffixes: [main_ct_phase_3_active_power, primary_phase_3_active_power], unit: W, access: read}
+      primary_phase_3_current: {domain: sensor, suffixes: [main_ct_phase_3_active_current, primary_phase_3_current], unit: A, access: read}
+      primary_phase_3_voltage: {domain: sensor, suffixes: [main_ct_phase_3_voltage, primary_phase_3_voltage], unit: V, access: read}
+      primary_total_forward_active_energy: {domain: sensor, suffixes: [main_ct_total_import, primary_total_forward_active_energy], unit: kWh, access: read}
+      primary_total_reverse_active_energy: {domain: sensor, suffixes: [main_ct_total_export, primary_total_reverse_active_energy], unit: kWh, access: read}
+      secondary_total_active_power: {domain: sensor, suffixes: [secondary_ct_total_active_power, secondary_total_active_power], unit: W, access: read}
+      secondary_total_reactive_power: {domain: sensor, suffixes: [secondary_ct_total_reactive_power, secondary_total_reactive_power], unit: var, access: read}
+      secondary_total_power_factor: {domain: sensor, suffixes: [secondary_ct_total_power_factor, secondary_total_power_factor], access: read}
+      secondary_phase_1_active_power: {domain: sensor, suffixes: [secondary_ct_phase_1_active_power, secondary_phase_1_active_power], unit: W, access: read}
+      secondary_phase_1_current: {domain: sensor, suffixes: [secondary_ct_phase_1_active_current, secondary_phase_1_current], unit: A, access: read}
+      secondary_phase_1_voltage: {domain: sensor, suffixes: [secondary_ct_phase_1_voltage, secondary_phase_1_voltage], unit: V, access: read}
+      secondary_phase_2_active_power: {domain: sensor, suffixes: [secondary_ct_phase_2_active_power, secondary_phase_2_active_power], unit: W, access: read}
+      secondary_phase_2_current: {domain: sensor, suffixes: [secondary_ct_phase_2_active_current, secondary_phase_2_current], unit: A, access: read}
+      secondary_phase_2_voltage: {domain: sensor, suffixes: [secondary_ct_phase_2_voltage, secondary_phase_2_voltage], unit: V, access: read}
+      secondary_phase_3_active_power: {domain: sensor, suffixes: [secondary_ct_phase_3_active_power, secondary_phase_3_active_power], unit: W, access: read}
+      secondary_phase_3_current: {domain: sensor, suffixes: [secondary_ct_phase_3_active_current, secondary_phase_3_current], unit: A, access: read}
+      secondary_phase_3_voltage: {domain: sensor, suffixes: [secondary_ct_phase_3_voltage, secondary_phase_3_voltage], unit: V, access: read}
+      secondary_total_forward_active_energy: {domain: sensor, suffixes: [secondary_ct_total_import, secondary_total_forward_active_energy], unit: kWh, access: read}
+      secondary_total_reverse_active_energy: {domain: sensor, suffixes: [secondary_ct_total_export, secondary_total_reverse_active_energy], unit: kWh, access: read}
+    controls: {}

@@ -1,0 +1,9 @@
+schema_version: "1.0"
+
+strategies:
+  SAVE:
+    backup_reserve_target: 20
+  AUTO:
+    backup_reserve_target: 30
+  BACKUP:
+    backup_reserve_target: 80

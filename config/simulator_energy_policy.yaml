@@ -1,0 +1,29 @@
+version: v1
+enabled: false
+time_zone: Asia/Shanghai
+history_backfill_days: 7
+history_interval_minutes: 15
+
+# Legacy single-device fallback. Disabled because the shared HouseholdWorld
+# simulator and Smart Meter are now the only runtime truth source.
+solar:
+  sunrise_hour: 6.0
+  sunset_hour: 18.5
+  peak_power_w: 4200
+
+load:
+  base_power_w: 900
+  overnight_extra_w: 250
+  morning_peak_start_hour: 6.5
+  morning_peak_end_hour: 9.0
+  morning_peak_extra_w: 1100
+  daytime_extra_w: 350
+  evening_peak_start_hour: 17.0
+  evening_peak_end_hour: 23.5
+  evening_peak_extra_w: 1800
+
+battery:
+  default_reserve_percent: 35
+  reserve_margin_percent: 5
+  max_charge_power_w: 1200
+  max_discharge_power_w: 800

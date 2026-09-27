@@ -1,0 +1,11 @@
+country: CN
+currency: CNY
+unit: kWh
+
+pricing_type: reference_average
+
+reference:
+  price_per_kwh: 0.54
+  provider: NDRC
+  reference_date: "2019-08-23"
+  realtime: false
